@@ -12,9 +12,12 @@ angular.module('CommentApp', ['ui.boostraps'])
 
 	.controller('CommentsController', function($scope, $http){
 
+        $scope.max = 5;
+        $scope.rating = 0;
+
 		$scope.refreshComments = function() {
             $scope.loading = true;
-            $http.get(commentUrl + '?where={"done" : false}')
+            $http.get(commentUrl + '?order=-score')
                 .success(function(responseData) {
                     $scope.comments = responseData.results;
                 })
@@ -24,25 +27,26 @@ angular.module('CommentApp', ['ui.boostraps'])
                 .finally(function(){
                     $scope.loading=false;
                 });
-
         };
+
         $scope.refreshComments();
 
-        $scope.newComment = { done: false};
-
-		$scope.addComment = function(comment) {
-			$http.post(commentUrl, comment)
-				.success(function(responseData) {
+		$scope.addComments = function(comment) {
+            if(comment.title !== undefined || comment.name !== undefined || commment.comment !== undefined) {
+                $http.post(commentUrl, comment)
+                .success(function(responseData) {
                     comment.objectId = responseData.objectId;
                     $scope.commments.push(comment);
-                    $scope.newComment = {done: false};
+                    $scope.newComment = {score: 0};
                 })
-					
+                    
+            }
+			
 		};
 
-        $scope.updateComment = function(comment) {
+        $scope.updateComments = function(comment) {
              $scope.updating = true;
-             $http.post(commentUrl + comment.objectId, comment)
+             $http.post(commentUrl + comment.objectId)
                 .success(function(responseData) {
                 })
                 .error(function(err) {
@@ -50,4 +54,18 @@ angular.module('CommentApp', ['ui.boostraps'])
                 })
         };
 
+        $scope.updateScore = function(comment, vote) {
+            comment.score = comment.score + vote;
+            if (comment.score < 0) {
+                comment.score = 0;
+            } 
+            $http.put(url + comment.objectId, comment)
+                .success(function(responseData) {
+                })
+                .error(function(err) {
+                    console.log(err);
+                });
+        };
+
 	});
+
