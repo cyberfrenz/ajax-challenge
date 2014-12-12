@@ -16,7 +16,6 @@ angular.module('CommentApp', ['ui.bootstrap'])
         $scope.rating = 0;
 
 		$scope.refreshComments = function() {
-
             $scope.loading = true;
             $http.get(commentUrl + '?order=-score')
                 .success(function(responseData) {
@@ -31,8 +30,18 @@ angular.module('CommentApp', ['ui.bootstrap'])
         };
 
 
-        $scope.refreshComments();
-        $scope.newComment = {score: 0};
+        // $scope.refreshComments();
+        // $scope.newComment = {score: 0};
+
+        $http.get(commentUrl)
+            .success(function(data) {
+                $scope.comments = data.results;
+            })
+            .error(function(err) {
+                console.log(err);
+            })
+
+            $scope.refreshComments();
 
 
 		$scope.addComments = function(comment) {

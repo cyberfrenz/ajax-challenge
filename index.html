@@ -55,7 +55,7 @@
                   <p>
                     <button class="btn btn-primary" id="refresh" ng-click="refreshComments()">Refresh</button>
                     <section class="details">
-                        <table id="commentHistory" ng-repeat="comment in comments">
+                        <table id="commentHistory" ng-repeat="comment in comments | orderBy : -score">
                             <p class="title">{{comment.title}}</p>
                             <p class="name">{{comment.name}}</p>
                             <p class="comment">{{comment.comment}}</p>
