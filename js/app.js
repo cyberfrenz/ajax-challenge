@@ -2,7 +2,7 @@
 
 var commentUrl = 'https://api.parse.com/1/classes/comments';
 
-angular.module('CommentApp', ['ui.boostraps'])
+angular.module('CommentApp', ['ui.bootstrap'])
 
 	.config(function($httpProvider) {
 
@@ -16,6 +16,7 @@ angular.module('CommentApp', ['ui.boostraps'])
         $scope.rating = 0;
 
 		$scope.refreshComments = function() {
+
             $scope.loading = true;
             $http.get(commentUrl + '?order=-score')
                 .success(function(responseData) {
@@ -24,35 +25,39 @@ angular.module('CommentApp', ['ui.boostraps'])
                 .error(function(err) {
                     console.log(err);
                 })
-                .finally(function(){
-                    $scope.loading=false;
+                .finally(function() {
+                    $scope.loading = false;
                 });
         };
 
+
         $scope.refreshComments();
+        $scope.newComment = {score: 0};
+
 
 		$scope.addComments = function(comment) {
             if(comment.title !== undefined || comment.name !== undefined || commment.comment !== undefined) {
                 $http.post(commentUrl, comment)
-                .success(function(responseData) {
-                    comment.objectId = responseData.objectId;
-                    $scope.commments.push(comment);
-                    $scope.newComment = {score: 0};
-                })
-                    
+                    .success(function(responseData) {
+                        comment.objectId = responseData.objectId;
+                        $scope.comments.push(comment);
+                        $scope.newComment = {score: 0};
+                    });
             }
-			
 		};
+
 
         $scope.updateComments = function(comment) {
              $scope.updating = true;
-             $http.post(commentUrl + comment.objectId)
+             $http.delete(commentUrl + comment.objectId)
                 .success(function(responseData) {
+                    $scope.refreshComments();
                 })
                 .error(function(err) {
                     console.log(err);
-                })
+                });
         };
+
 
         $scope.updateScore = function(comment, vote) {
             comment.score = comment.score + vote;
@@ -66,6 +71,7 @@ angular.module('CommentApp', ['ui.boostraps'])
                     console.log(err);
                 });
         };
+
 
 	});
 
