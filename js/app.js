@@ -14,7 +14,9 @@ angular.module('CommentApp', ['ui.bootstrap'])
 
         $scope.max = 5;
         $scope.rating = 0;
+        $scope.isReadonly = false;
 
+        //refreshes current comments for user to view
 		$scope.refreshComments = function() {
             $scope.loading = true;
             $http.get(commentUrl + '?order=-score')
@@ -29,22 +31,16 @@ angular.module('CommentApp', ['ui.bootstrap'])
                 });
         };
 
-
-        // $scope.refreshComments();
-        // $scope.newComment = {score: 0};
-
         $http.get(commentUrl)
-            .success(function(data) {
+            .success(function(data){
                 $scope.comments = data.results;
             })
-            .error(function(err) {
-                console.log(err);
-            })
 
-            $scope.refreshComments();
+        $scope.refreshComments();
+        $scope.newComment = {score: 0};
 
-
-		$scope.addComments = function(comment) {
+        //adds a user's comments if all fields are met
+		$scope.addComment = function(comment) {
             if(comment.title !== undefined || comment.name !== undefined || commment.comment !== undefined) {
                 $http.post(commentUrl, comment)
                     .success(function(responseData) {
@@ -55,10 +51,10 @@ angular.module('CommentApp', ['ui.bootstrap'])
             }
 		};
 
-
-        $scope.updateComments = function(comment) {
+        //update existing comments
+        $scope.deleteComment = function(comment) {
              $scope.updating = true;
-             $http.delete(commentUrl + comment.objectId)
+             $http.delete(commentUrl + '/' + comment.objectId, comment)
                 .success(function(responseData) {
                     $scope.refreshComments();
                 })
@@ -67,13 +63,12 @@ angular.module('CommentApp', ['ui.bootstrap'])
                 });
         };
 
-
         $scope.updateScore = function(comment, vote) {
             comment.score = comment.score + vote;
             if (comment.score < 0) {
                 comment.score = 0;
             } 
-            $http.put(url + comment.objectId, comment)
+            $http.put(commentUrl + '/' + comment.objectId, comment)
                 .success(function(responseData) {
                 })
                 .error(function(err) {

@@ -3,6 +3,9 @@
 body {
     font-family: 'Ubuntu', 'Helvetica Neue', 'Helvetica', sans-serif;
     font-weight: 400;
+    text-align: center;
+    background: url('../img/interstellar.jpg');
+    color: #FF00FF;
 }
 
 .product-picture {
@@ -10,4 +13,14 @@ body {
     height: 130px;
     margin-right: 10px;
 }
+#title{
+	font-size: 20px;
+}
 
+#comments {
+	padding: 2px;
+}
+
+#name {
+	font-size: 20px;
+}

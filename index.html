@@ -17,28 +17,28 @@
             </section>
 
             <section id="addComment">
-                <h2>Add a Comment</h2>
+                <h2>Add Comment</h2>
                 
-                <form ng-submit="addComments(newComment)">
+                <form ng-submit="addComment(newComment)">
 
                     <div class="form-group">
-                        <label for="comment-title">Title: </label>
+                        <label for="comment-title"><h3>Title: </h3></label>
                         <input type="text" id="comment-title" class="form-control" placeholder="title of new task" ng-model="newComment.title"/></input>
                     </div>
 
                     <div class="form-group">
-                        <label for="comment-name">Name: </label>
+                        <label for="comment-name"><h3>Name: </h3></label>
                         <input type="text" id="comment-name" class="form-control" placeholder="your name" ng-model="newComment.name"></input>
                     </div>
 
                     <div class="form-group">
-                        <label for="comment">Comment: </label>
+                        <label for="comment-comment"><h3>Comment: <h3></label>
                         <input type="text" id="comment" class="form-control" placeholder="...." ng-model="newComment.comment"></input>
                     </div>
 
                     <div class="form-group">
                         <label for="comment-rating"></label>
-                        <h1>Rate Me!</h1>
+                        <h3>Rate Me!</h3>
                         <rating id ="rating" ng-model="newComment.rating" max="max"></rating>
                     </div>
 
@@ -52,21 +52,22 @@
 
             <section id="comments">
                 <h2>Comments</h2>
-                  <p>
-                    <button class="btn btn-primary" id="refresh" ng-click="refreshComments()">Refresh</button>
-                    <section class="details">
-                        <table id="commentHistory" ng-repeat="comment in comments | orderBy : -score">
-                            <p class="title">{{comment.title}}</p>
-                            <p class="name">{{comment.name}}</p>
-                            <p class="comment">{{comment.comment}}</p>
-                            <p class="rating">Rating: {{comment.rating}}</p>
-                            <p class="score">Score: {{comment.score}}</p>
-                            <button class="btn btn-primary" id="upvote" ng-click="updateScore(comment, 1)" ng-disabled="voted">Like</button>
-                            <button class="btn btn-primary" id="downvote" ng-click="updateScore(comment, -1)" ng-disabled="voted">Dislike</button>
-                            <button class="btn btn-primary" id="delete" ng-click="updateComments(comment)">Delete Me!</button>
-                        </table>    
+                 <p id="border"></p>
+                <img src="img/ajax-spinner-sm.gif" id="commentSpinner" alt="loading animation" ng-if="loading"/>
+                <button class="btn btn-primary" id="refresh" ng-click="refreshComments()">Refresh</button>
+                <table id="previousComments">
+                    <section ng-repeat="comment in comments">
+                        <p id="title">Title: {{comment.title}}</p>
+                        <p id="name">By: {{comment.name}}</p>
+                        <p id="comment">{{comment.comment}}</p>
+                        <p id="rating">Rating: {{comment.rating}}</p>
+                        <p id="score">Score: {{comment.score}}</p>
+                        <img src="img/like.jpg" class"btn btn-primary" id="awesome" ng-click="updateScore(comment, 1)" ng-disabled="voted"/>
+                        <img src="img/dislike.png" class"btn btn-primary" id="hater" ng-click="updateScore(comment, -1)" ng-disabled="voted"/>
+                        <img src="img/delete.png" class"btn btn-primary" id="delete" ng-click="deleteComment(comment)"/>
+                        <p id="border"></p>
                     </section>
-                </p>
+                </table> 
             </section>
 
         </main>
